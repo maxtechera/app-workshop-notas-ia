@@ -68,7 +68,19 @@ export default function NoteCard({ note, onEdit, onDelete, onToggle, onUpdate }:
           className="mt-auto flex items-center justify-between pt-2"
           style={{ borderTopWidth: '1px', borderTopColor: 'var(--border-subtle)' }}
         >
-          <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{date}</span>
+          <div className="flex flex-col gap-0.5">
+            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{date}</span>
+            {note.dueDate && (
+              <span
+                className="text-xs font-medium"
+                style={{
+                  color: !note.completed && note.dueDate < Date.now() ? 'var(--accent-red)' : 'var(--text-muted)',
+                }}
+              >
+                Vence: {new Date(note.dueDate).toLocaleDateString('es', { day: 'numeric', month: 'short', year: 'numeric' })}
+              </span>
+            )}
+          </div>
           <div className="flex gap-1">
             <button
               onClick={handleImprove}

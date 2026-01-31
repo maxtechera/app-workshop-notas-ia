@@ -5,4 +5,5 @@ export interface Note {
   createdAt: number
   updatedAt: number
   completed: boolean
+  dueDate?: number
 }

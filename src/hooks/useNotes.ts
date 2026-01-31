@@ -19,17 +19,17 @@ export function useNotes() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(notes))
   }, [notes])
 
-  const addNote = (title: string, content: string) => {
+  const addNote = (title: string, content: string, dueDate?: number) => {
     const now = Date.now()
     setNotes(prev => [
-      { id: crypto.randomUUID(), title, content, createdAt: now, updatedAt: now, completed: false },
+      { id: crypto.randomUUID(), title, content, createdAt: now, updatedAt: now, completed: false, dueDate },
       ...prev,
     ])
   }
 
-  const updateNote = (id: string, title: string, content: string) => {
+  const updateNote = (id: string, title: string, content: string, dueDate?: number) => {
     setNotes(prev =>
-      prev.map(n => (n.id === id ? { ...n, title, content, updatedAt: Date.now() } : n)),
+      prev.map(n => (n.id === id ? { ...n, title, content, dueDate, updatedAt: Date.now() } : n)),
     )
   }
 

@@ -5,13 +5,14 @@ import ImprovePreview from './ImprovePreview'
 
 interface Props {
   editingNote: Note | null
-  onSave: (title: string, content: string) => void
+  onSave: (title: string, content: string, dueDate?: number) => void
   onCancel: () => void
 }
 
 export default function NoteForm({ editingNote, onSave, onCancel }: Props) {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
+  const [dueDate, setDueDate] = useState('')
   const [improving, setImproving] = useState(false)
   const [preview, setPreview] = useState<{ title: string; content: string } | null>(null)
 
@@ -19,18 +20,22 @@ export default function NoteForm({ editingNote, onSave, onCancel }: Props) {
     if (editingNote) {
       setTitle(editingNote.title)
       setContent(editingNote.content)
+      setDueDate(editingNote.dueDate ? new Date(editingNote.dueDate).toISOString().split('T')[0] : '')
     } else {
       setTitle('')
       setContent('')
+      setDueDate('')
     }
   }, [editingNote])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!title.trim()) return
-    onSave(title.trim(), content.trim())
+    const dueDateTs = dueDate ? new Date(dueDate + 'T00:00:00').getTime() : undefined
+    onSave(title.trim(), content.trim(), dueDateTs)
     setTitle('')
     setContent('')
+    setDueDate('')
   }
 
   const handleImprove = async () => {
@@ -80,6 +85,20 @@ export default function NoteForm({ editingNote, onSave, onCancel }: Props) {
             borderColor: 'var(--border-color)',
             '--tw-ring-color': 'var(--ring-focus)',
           } as React.CSSProperties}
+        />
+        <input
+          type="date"
+          value={dueDate}
+          onChange={e => setDueDate(e.target.value)}
+          className="w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2"
+          style={{
+            backgroundColor: 'var(--bg-input)',
+            color: 'var(--text-primary)',
+            borderWidth: '1px',
+            borderColor: 'var(--border-color)',
+            '--tw-ring-color': 'var(--ring-focus)',
+          } as React.CSSProperties}
+          placeholder="Fecha de vencimiento"
         />
         <div className="flex gap-2">
           <button
