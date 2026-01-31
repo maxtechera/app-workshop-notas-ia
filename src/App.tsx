@@ -22,12 +22,12 @@ export default function App() {
 
   const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark')
 
-  const handleSave = (title: string, content: string) => {
+  const handleSave = (title: string, content: string, dueDate?: number) => {
     if (editingNote) {
-      updateNote(editingNote.id, title, content)
+      updateNote(editingNote.id, title, content, dueDate)
       setEditingNote(null)
     } else {
-      addNote(title, content)
+      addNote(title, content, dueDate)
     }
   }
 
